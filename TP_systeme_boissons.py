@@ -192,28 +192,21 @@ if __name__ == "__main__":
 
 # PARTIE 8 — Questions de réflexion
 
-# Q1 : Quelle partie permet d'ajouter facilement de nouveaux ingrédients ?
-# → Le patron Décorateur (classe DecorateurBoisson)
-#   Exemple : pour ajouter "Vanille", il suffit de créer une classe Vanille(DecorateurBoisson)
-#     class Vanille(DecorateurBoisson):
-#         def cout(self):
-#             return self._boisson.cout() + 0.6
-#         def description(self):
-#             return self._boisson.description() + ", Vanille"
+# Q1 : Que se passe-t-il si on essaie de créer directement un objet Boisson() ?
+# → Python refuse l'instanciation et lève une erreur TypeError.
+#   La classe abstraite joue le rôle d'un contrat : tant qu'une sous-classe
+#   n'implémente pas cout() et description(), elle ne peut pas être utilisée.
+#   Cela garantit que chaque boisson du système est complète et fonctionnelle.
 
-# Q2 : Pour ajouter le chocolat chaud, que faut-il faire ?
-# → Créer une nouvelle classe qui hérite de Boisson
-#     class ChocolatChaud(Boisson):
-#         def cout(self):
-#             return 3.0
-#         def description(self):
-#             return "Chocolat chaud"
+# Q2 : Peut-on appliquer plusieurs fois le même ingrédient sur une boisson ?
+# → Oui, rien ne l'interdit techniquement. Exemple :
+#     boisson = Sucre(Sucre(Cafe()))
+#     # Résultat : "Café simple, Sucre, Sucre" à 2.40 €
+#   Chaque décorateur s'empile indépendamment. Pour éviter les doublons,
+#   il faudrait ajouter une vérification dans le __init__ du décorateur.
 
-# Q3 : Pourquoi séparer les responsabilités entre plusieurs classes ?
-# → Chaque classe a un rôle unique (SRP - Single Responsibility Principle)
-#   - Boisson → concept de boisson
-#   - DecorateurBoisson → ingrédients
-#   - Commande → gestion de la commande
-#   - Fidelite → gestion des points
-#   - Client → stocke les infos du client
-# Cela rend le code plus clair, modifiable et sans bugs
+# Q3 : Pourquoi avoir utilisé @dataclass pour Client plutôt qu'une classe normale ?
+# → Une classe normale aurait nécessité d'écrire manuellement __init__,
+#   __repr__ et __eq__. Avec @dataclass, Python génère tout automatiquement
+#   à partir des attributs déclarés. Le code est plus court, plus lisible,
+#   et moins risqué car on évite les erreurs dans des méthodes répétitives.
